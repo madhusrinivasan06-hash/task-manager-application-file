@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Task Manager Pro V2</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:
+linear-gradient(rgba(0,0,0,.85),
+rgba(0,0,0,.85)),
+url("https://images.unsplash.com/photo-1497366754035-f200968a6e72");
+background-size:cover;
+background-position:center;
+padding:20px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+.logo{
+font-size:70px;
+text-align:center;
+}
+
+h1{
+text-align:center;
+color:white;
+margin-bottom:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:15px;
+margin-top:15px;
+}
+
+input,
+select{
+width:100%;
+padding:14px;
+margin:8px 0;
+border:none;
+outline:none;
+border-radius:10px;
+background:#1f1f1f;
+color:white;
+}
+
+button{
+padding:12px 18px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.success{
+background:#16a34a;
+color:white;
+}
+
+.warning{
+background:#f59e0b;
+}
+
+.danger{
+background:#dc2626;
+color:white;
+}
+
+.theme{
+background:#8b5cf6;
+color:white;
+}
+
+.hidden{
+display:none;
+}
+
+.auth-buttons{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.avatar{
+width:60px;
+height:60px;
+border-radius:50%;
+background:#2563eb;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:24px;
+font-weight:bold;
+color:white;
+}
+
+.username{
+color:white;
+font-size:18px;
+font-weight:600;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+gap:15px;
+margin:20px 0;
+}
+
+.stat-box{
+background:
+rgba(255,255,255,0.08);
+padding:20px;
+border-radius:15px;
+text-align:center;
+}
+
+.stat-box h3{
+color:#bbb;
+font-size:14px;
+}
+
+.stat-box p{
+font-size:28px;
+color:white;
+font-weight:bold;
+margin-top:10px;
+}
+
+.search-area{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
+
+.task-input{
+display:grid;
+grid-template-columns:
+2fr 1fr 1fr auto;
+gap:10px;
+margin-bottom:20px;
+}
+
+.task{
+background:
+rgba(255,255,255,0.08);
+padding:15px;
+border-radius:12px;
+margin-bottom:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.task-info{
+display:flex;
+flex-direction:column;
+gap:5px;
+}
+
+.task-title{
+color:white;
+font-size:17px;
+}
+
+.priority{
+font-size:13px;
+font-weight:bold;
+}
+
+.high{
+color:#ff4d4d;
+}
+
+.medium{
+color:#ffd633;
+}
+
+.low{
+color:#66ff66;
+}
+
+.due{
+color:#bbb;
+font-size:13px;
+}
+
+.completed .task-title{
+text-decoration:line-through;
+opacity:.5;
+}
+
+.task-actions{
+display:flex;
+gap:8px;
+}
+
+.filter-buttons{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+flex-wrap:wrap;
+}
+
+.footer{
+text-align:center;
+margin-top:20px;
+color:#aaa;
+}
+
+.light-mode{
+background:#f4f4f4;
+}
+
+.light-mode .container{
+background:white;
+}
+
+.light-mode h1,
+.light-mode .username,
+.light-mode .task-title{
+color:black;
+}
+
+.light-mode .stat-box{
+background:#f1f1f1;
+}
+
+.light-mode input,
+.light-mode select{
+background:#f1f1f1;
+color:black;
+}
+
+@media(max-width:768px){
+
+.stats{
+grid-template-columns:1fr;
+}
+
+.task-input{
+grid-template-columns:1fr;
+}
+
+.search-area{
+flex-direction:column;
+}
+
+.task{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">📋</div>
+
+<h1>Task Manager Application</h1>
+
+<!-- AUTH SECTION -->
+
+<div id="authSection">
+
+<div class="card">
+
+<h2 style="color:white;text-align:center;">
+Register
+</h2>
+
+<input
+id="registerUsername"
+placeholder="Username">
+
+<input
+id="registerPassword"
+type="password"
+placeholder="Password">
+
+<button
+class="success"
+onclick="registerUser()">
+
+Create Account
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2 style="color:white;text-align:center;">
+Login
+</h2>
+
+<input
+id="loginUsername"
+placeholder="Username">
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Password">
+
+<button
+class="primary"
+onclick="loginUser()">
+
+Login
+
+</button>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div
+id="dashboard"
+class="hidden">
+
+<div class="topbar">
+
+<div class="profile">
+
+<div class="avatar"
+id="avatarLetter">
+M
+</div>
+
+<div class="username">
+
+Welcome,
+<span id="displayUser"></span>
+
+</div>
+
+</div>
+
+<div>
+
+<button
+class="theme"
+onclick="toggleTheme()">
+
+Theme
+
+</button>
+
+<button
+class="danger"
+onclick="logoutUser()">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-box">
+<h3>Total Tasks</h3>
+<p id="totalTasks">0</p>
+</div>
+
+<div class="stat-box">
+<h3>Completed</h3>
+<p id="completedTasks">0</p>
+</div>
+
+<div class="stat-box">
+<h3>Pending</h3>
+<p id="pendingTasks">0</p>
+</div>
+
+<div class="stat-box">
+<h3>Progress %</h3>
+<p id="progress">0%</p>
+</div>
+
+</div>
+
+<div class="search-area">
+
+<input
+id="searchTask"
+placeholder="Search Tasks...">
+
+</div>
+
+<div class="filter-buttons">
+
+<button
+class="primary"
+onclick="setFilter('all')">
+
+All
+
+</button>
+
+<button
+class="success"
+onclick="setFilter('completed')">
+
+Completed
+
+</button>
+
+<button
+class="warning"
+onclick="setFilter('pending')">
+
+Pending
+
+</button>
+
+</div>
+
+<div class="task-input">
+
+<input
+id="taskInput"
+placeholder="Task Name">
+
+<select id="priority">
+
+<option>High</option>
+<option>Medium</option>
+<option>Low</option>
+
+</select>
+
+<input
+type="date"
+id="dueDate">
+
+<button
+class="primary"
+onclick="addTask()">
+
+Add
+
+</button>
+
+</div>
+
+<div id="taskList"></div>
+
+</div>
+
+<div class="footer">
+
+Developed By Madhu ❤️
+
+</div>
+
+</div>
+
+<script>
+
+let currentUser =
+localStorage.getItem(
+"currentUser"
+);
+
+let currentFilter =
+"all";
+
+function getUsers(){
+
+return JSON.parse(
+localStorage.getItem("users")
+) || [];
+
+}
+
+function saveUsers(users){
+
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+);
+
+}
+
+function registerUser(){
+
+let username =
+document.getElementById(
+"registerUsername"
+).value.trim();
+
+let password =
+document.getElementById(
+"registerPassword"
+).value.trim();
+
+if(
+username === "" ||
+password === ""
+){
+
+alert(
+"Please fill all fields"
+);
+
+return;
+
+}
+
+let users =
+getUsers();
+
+let exists =
+users.find(
+u =>
+u.username === username
+);
+
+if(exists){
+
+alert(
+"Username already exists"
+);
+
+return;
+
+}
+
+users.push({
+
+username:username,
+password:password,
+tasks:[]
+
+});
+
+saveUsers(users);
+
+alert(
+"Account Created Successfully"
+);
+
+document.getElementById(
+"registerUsername"
+).value = "";
+
+document.getElementById(
+"registerPassword"
+).value = "";
+
+}
+
+function loginUser(){
+
+let username =
+document.getElementById(
+"loginUsername"
+).value.trim();
+
+let password =
+document.getElementById(
+"loginPassword"
+).value.trim();
+
+let users =
+getUsers();
+
+let user =
+users.find(
+
+u =>
+u.username === username &&
+u.password === password
+
+);
+
+if(!user){
+
+alert(
+"Invalid Username or Password"
+);
+
+return;
+
+}
+
+currentUser =
+username;
+
+localStorage.setItem(
+"currentUser",
+username
+);
+
+showDashboard();
+
+}
+
+function logoutUser(){
+
+localStorage.removeItem(
+"currentUser"
+);
+
+location.reload();
+
+}
+
+function showDashboard(){
+
+document.getElementById(
+"authSection"
+).classList.add(
+"hidden"
+);
+
+document.getElementById(
+"dashboard"
+).classList.remove(
+"hidden"
+);
+
+document.getElementById(
+"displayUser"
+).innerText =
+currentUser;
+
+document.getElementById(
+"avatarLetter"
+).innerText =
+currentUser
+.charAt(0)
+.toUpperCase();
+
+renderTasks();
+
+}
+
+function getCurrentUser(){
+
+let users =
+getUsers();
+
+return users.find(
+
+u =>
+u.username === currentUser
+
+);
+
+}
+
+function updateCurrentUser(
+userData
+){
+
+let users =
+getUsers();
+
+let index =
+users.findIndex(
+
+u =>
+u.username === currentUser
+
+);
+
+users[index] =
+userData;
+
+saveUsers(users);
+
+}
+
+function toggleTheme(){
+
+document.body.classList.toggle(
+"light-mode"
+);
+
+}
+
+function setFilter(filter){
+
+currentFilter = filter;
+
+renderTasks();
+
+}
+
+function addTask(){
+
+let taskName =
+document.getElementById(
+"taskInput"
+).value.trim();
+
+let priority =
+document.getElementById(
+"priority"
+).value;
+
+let dueDate =
+document.getElementById(
+"dueDate"
+).value;
+
+if(taskName === ""){
+
+alert(
+"Please enter a task"
+);
+
+return;
+
+}
+
+let user =
+getCurrentUser();
+
+user.tasks.push({
+
+name:taskName,
+priority:priority,
+dueDate:dueDate,
+completed:false
+
+});
+
+updateCurrentUser(user);
+
+document.getElementById(
+"taskInput"
+).value = "";
+
+document.getElementById(
+"dueDate"
+).value = "";
+
+renderTasks();
+
+}
+
+function renderTasks(){
+
+let taskList =
+document.getElementById(
+"taskList"
+);
+
+taskList.innerHTML = "";
+
+let user =
+getCurrentUser();
+
+if(!user) return;
+
+let searchText =
+document.getElementById(
+"searchTask"
+).value.toLowerCase();
+
+let filteredTasks =
+user.tasks.filter(task=>{
+
+let matchesSearch =
+task.name
+.toLowerCase()
+.includes(searchText);
+
+let matchesFilter =
+true;
+
+if(currentFilter ===
+"completed"){
+
+matchesFilter =
+task.completed;
+
+}
+
+if(currentFilter ===
+"pending"){
+
+matchesFilter =
+!task.completed;
+
+}
+
+return
+matchesSearch &&
+matchesFilter;
+
+});
+
+filteredTasks.forEach(
+
+(task,index)=>{
+
+let priorityClass =
+"low";
+
+if(
+task.priority === "High"
+){
+
+priorityClass =
+"high";
+
+}
+
+if(
+task.priority ===
+"Medium"
+){
+
+priorityClass =
+"medium";
+
+}
+
+let taskDiv =
+document.createElement(
+"div"
+);
+
+taskDiv.className =
+task.completed
+? "task completed"
+: "task";
+
+taskDiv.innerHTML = `
+
+<div class="task-info">
+
+<div class="task-title">
+
+${task.name}
+
+</div>
+
+<div class="priority ${priorityClass}">
+
+Priority :
+${task.priority}
+
+</div>
+
+<div class="due">
+
+📅 Due :
+${task.dueDate || "No Date"}
+
+</div>
+
+</div>
+
+<div class="task-actions">
+
+<button
+class="success"
+onclick="toggleTask(${user.tasks.indexOf(task)})">
+
+${task.completed
+? "Undo"
+: "Done"}
+
+</button>
+
+<button
+class="warning"
+onclick="editTask(${user.tasks.indexOf(task)})">
+
+Edit
+
+</button>
+
+<button
+class="danger"
+onclick="deleteTask(${user.tasks.indexOf(task)})">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+taskList.appendChild(
+taskDiv
+);
+
+});
+
+updateStatistics();
+
+}
+
+function toggleTask(index){
+
+let user =
+getCurrentUser();
+
+user.tasks[index]
+.completed =
+
+!user.tasks[index]
+.completed;
+
+updateCurrentUser(
+user
+);
+
+renderTasks();
+
+}
+
+function editTask(index){
+
+let user =
+getCurrentUser();
+
+let updatedTask =
+prompt(
+
+"Edit Task",
+
+user.tasks[index]
+.name
+
+);
+
+if(
+
+updatedTask !== null &&
+
+updatedTask.trim() !== ""
+
+){
+
+user.tasks[index]
+.name =
+
+updatedTask;
+
+updateCurrentUser(
+user
+);
+
+renderTasks();
+
+}
+
+}
+
+function deleteTask(index){
+
+let confirmDelete =
+confirm(
+
+"Delete this task?"
+
+);
+
+if(!confirmDelete)
+return;
+
+let user =
+getCurrentUser();
+
+user.tasks.splice(
+index,
+1
+);
+
+updateCurrentUser(
+user
+);
+
+renderTasks();
+
+}
+
+function updateStatistics(){
+
+let user =
+getCurrentUser();
+
+let total =
+user.tasks.length;
+
+let completed =
+user.tasks.filter(
+
+task =>
+task.completed
+
+).length;
+
+let pending =
+total -
+completed;
+
+let progress =
+0;
+
+if(total > 0){
+
+progress = Math.round(
+
+(completed / total)
+* 100
+
+);
+
+}
+
+document.getElementById(
+"totalTasks"
+).innerText =
+total;
+
+document.getElementById(
+"completedTasks"
+).innerText =
+completed;
+
+document.getElementById(
+"pendingTasks"
+).innerText =
+pending;
+
+document.getElementById(
+"progress"
+).innerText =
+progress + "%";
+
+}
+
+document
+.getElementById(
+"searchTask"
+)
+.addEventListener(
+
+"keyup",
+
+function(){
+
+renderTasks();
+
+}
+
+);
+
+if(currentUser){
+
+showDashboard();
+
+}
+
+</script>
+
+</body>
+</html>
